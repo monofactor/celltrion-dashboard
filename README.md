@@ -12,20 +12,43 @@ Gensenta DP / Fill-Finish CMO perspektifiyle aylık Celltrion intelligence rapor
 - **`pages.jsx`** — Page bileşenleri (Summary, Portfolio, Pipeline, Markets, News, Risks, Signals, Financial, Cenk)
 - **`logo.jsx`** — Celltrion + Linery logoları (base64)
 - **`fonts/`** — Geist Variable woff2 (light + italic)
-- **`build.py`** — Tek dosya HTML'e derleme script'i
+- **`build.py`** — Tek dosya HTML'e derleme script'i + data.jsx syntax check
 - **`SKILL_currency_section.md`** — Skill dosyasına eklenecek "Para Birimi Çevirisi (KRW → EUR)" bölümü
+- **`SKILL_link_verification_section.md`** — Skill dosyasına eklenecek "Kaynak Linki Doğrulama" bölümü
 
-## Aylık güncelleme akışı
+## Aylık güncelleme akışı (otomatik)
 
-1. `data.jsx`'i düzenle (yeni haberler, finansallar, risk/fırsat değişiklikleri).
-2. KRW değerlerini yayın tarihi kuruyla EUR'a çevir (skill'deki referans tablosuna bak).
-3. `python3 build.py` çalıştır.
-4. `dashboard.html`'i kontrol et.
+1. WebSearch ile son 30 günü tara, yeni haberleri topla.
+2. Her **yeni** URL'i WebFetch ile doğrula (slug uydurma yasak — Pearce IP boş sayfa döner).
+3. `data.jsx`'i düzenle (yeni haberler, finansallar, risk/fırsat değişiklikleri).
+4. KRW değerlerini yayın tarihi kuruyla EUR'a çevir (skill'deki referans tablosuna bak).
+5. `python3 build.py` çalıştır.
+6. `dashboard.html`'i kontrol et.
+
+> **Not:** Aylık akış mevcut linkleri yeniden taramaz. Toplu sağlık taraması manuel/on-demand çalıştırılır (aşağı bak).
+
+## Manuel link sağlık taraması (kullanıcı talep ettiğinde)
+
+Mevcut tüm linkleri WebFetch ile teste sok:
+
+```bash
+cd celltrion_dashboard
+grep -oE 'https?://[^"'"'"' )]+' data.jsx | sort -u
+# Her URL'i WebFetch ile test et
+```
+
+Bozulanlar için alternatif URL ara veya bulguyu "Doğrulanamadı" bölümüne taşı.
 
 ## Otomatik aylık job
 
 Her ayın 1'inde 09:00'da çalışan scheduled task: `celltrion-dashboard-monthly-update`.
-Task son 30 günü tarar, `data.jsx`'i günceller, `build.py`'yi çalıştırır.
+Task akışı:
+1. WebSearch ile son 30 gün
+2. Yeni URL'leri WebFetch ile doğrula
+3. KRW→EUR çeviri (yayın tarihi kuru)
+4. Karşılaştırma etiketleri (Yeni / Revize / Risk arttı / vb.)
+5. data.jsx güncelle + build.py çalıştır
+6. 7-maddelik aylık özet rapor (yeni link doğrulama özeti dahil)
 
 ## Tasarım kuralları
 
@@ -37,4 +60,7 @@ Task son 30 günü tarar, `data.jsx`'i günceller, `build.py`'yi çalıştırır
 ## Skill referansı
 
 Skill: `celltrion-intelligence-dashboard`
-DS/DP ayrımı, Gensenta GMP profili (FDA yok — Vial 4 PV hedef Q2 2027), KRW→EUR çevirisi kuralları skill'de tanımlı.
+- DS/DP ayrımı
+- Gensenta GMP profili (FDA yok — Vial 4 PV hedef Q2 2027)
+- KRW→EUR çevirisi (haberin yayın tarihindeki kur)
+- Kaynak linki doğrulama (sadece yeni URL'ler, manuel toplu tarama opsiyonu)

@@ -161,11 +161,17 @@ function Ribbon({ active, onChange }) {
             <span className="inline-flex items-center gap-1.5">
               <I.Cloud className="w-3.5 h-3.5 text-teal-600"/>
               Son güncelleme
-              <span className="font-semibold text-gray-900 ml-1">28 Mayıs 2026, Perşembe</span>
+              <span className="font-semibold text-gray-900 ml-1">
+                {window.LAST_UPDATED || "—"}
+              </span>
             </span>
             <div className="w-px h-4 bg-gray-300"/>
             <span className="text-gray-500">Kaynak</span>
-            <span className="font-medium text-gray-700">Celltrion IR · FDA · EMA · Pearce IP · Korea Herald</span>
+            <span className="font-medium text-gray-700">
+              {(window.SOURCES_USED && window.SOURCES_USED.length > 0)
+                ? window.SOURCES_USED.join(" · ")
+                : "—"}
+            </span>
           </div>
         </div>
       </div>
