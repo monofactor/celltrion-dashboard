@@ -13,8 +13,8 @@ Gensenta DP / Fill-Finish CMO perspektifiyle aylık Celltrion intelligence rapor
 - **`logo.jsx`** — Celltrion + Linery logoları (base64)
 - **`fonts/`** — Geist Variable woff2 (light + italic)
 - **`build.py`** — Tek dosya HTML'e derleme script'i + data.jsx syntax check
-- **`SKILL_currency_section.md`** — Skill dosyasına eklenecek "Para Birimi Çevirisi (KRW → EUR)" bölümü
-- **`SKILL_link_verification_section.md`** — Skill dosyasına eklenecek "Kaynak Linki Doğrulama" bölümü
+
+> Tüm yönetim kuralları (DS/DP ayrımı, Gensenta GMP profili, KRW→EUR çevirisi, link doğrulama, tasarım standardı) tek merkezde — `celltrion-intelligence-dashboard` skill'inin içinde. Klasörde ayrı kural/handoff dosyası tutulmaz.
 
 ## Aylık güncelleme akışı (otomatik)
 
@@ -41,7 +41,10 @@ Bozulanlar için alternatif URL ara veya bulguyu "Doğrulanamadı" bölümüne t
 
 ## Otomatik aylık job
 
-Her ayın 1'inde 09:00'da çalışan scheduled task: `celltrion-dashboard-monthly-update`.
+Scheduled task: `celltrion-dashboard-monthly-update` — her ayın 1'inde 09:00 (cron `0 9 1 * *`).
+
+> **Durum: PAUSED (enabled: false).** Dashboard 29 May 2026'da tam yenilendi, 1 Haz çalışması atlandı. 1 Temmuz öncesi yeniden etkinleştir: side panel → Scheduled → Enable, ya da Claude'a "celltrion job'ını aç" de.
+
 Task akışı:
 1. WebSearch ile son 30 gün
 2. Yeni URL'leri WebFetch ile doğrula

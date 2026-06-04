@@ -21,15 +21,15 @@ const STRATEGIC_DIRECTIONS = [
 ];
 
 const RECENT_DEVELOPMENTS = [
-  { date: "Haziran 2026", tag: "CT-P55 / Kanada+",       title: "CT-P55 (sekukinumab) Health Canada başvurusu; ABD/AB/Kore planlı", level: "Yüksek" },
-  { date: "Mayıs 2026",  tag: "Herzuma SC / Kore",      title: "Herzuma SC Kore MFDS başvurusu (EMA'yı takiben)",         level: "Yüksek" },
-  { date: "Mayıs 2026",  tag: "CT-G32 / Obezite",       title: "Obezite ilacı primat toksikolojisi başladı; IND 2027 H1", level: "Orta" },
-  { date: "Mayıs 2026",  tag: "Pipeline / Strateji",    title: "Science & Innovation Day 2026: ADC/msAb next-gen portföy", level: "Orta" },
-  { date: "Mayıs 2026",  tag: "Tüm portföy",            title: "Q1 2026: Gelir +36%, Faaliyet Karı +115,4% YoY",         level: "Kritik" },
+  { date: "Haziran 2026", tag: "CT-P55 / Kanada",         title: "CT-P55 (secukinumab) için ilk MA başvurusu — Health Canada",  level: "Kritik" },
+  { date: "Mayıs 2026",   tag: "Herzuma SC / Kore",       title: "Herzuma SC Kore MFDS başvurusu (EMA'dan sonra ikinci dosya)", level: "Kritik" },
+  { date: "Haziran 2026", tag: "Finansal / ABD",          title: "Q1 brüt kar +54,9%, Zymfentra reçete +185% YoY",              level: "Yüksek" },
+  { date: "Mayıs 2026",   tag: "Tüm portföy",             title: "Q1 2026 rekor: gelir +36%, faaliyet karı +115,5% YoY",        level: "Kritik" },
+  { date: "Haziran 2026", tag: "Regülasyon",              title: "Biosimilar dereg. (Faz III muafiyeti) ivme kazanıyor",        level: "Yüksek" },
 ];
 
 const URGENT_SIGNALS = [
-  { title: "Herzuma SC EMA + Kore MFDS Onayı", window: "2026 Q3-Q4 → 2027", detail: "EMA başvurusu Nis 2026, Kore MFDS başvurusu 28 May 2026'da yapıldı. CHMP pozitif görüş ~12-15 ay sonra bekleniyor. İlk SC trastuzumab biosimilar — first-mover. Gensenta EMA + MFDS onaylı — hem Avrupa hem Kore DP teklifi için kanal açık." },
+  { title: "Herzuma SC — EMA + Kore MFDS",   window: "2026 Q3-Q4",      detail: "EMA başvurusu Nis 2026, Kore MFDS başvurusu 28 May 2026 yapıldı. İlk SC trastuzumab biosimiları (first-mover). CHMP pozitif görüş ~12-15 ay sonra. Gensenta hem EMA hem MFDS onaylı — AB ve Kore DP/PFS kanalı açık." },
   { title: "SteQeyma Autoinjector AB Onayı",window: "2026 Q2",         detail: "CHMP pozitif görüş Aralık 2025. EC onayı 2-3 ay içinde bekleniyor. EMA-bound; Gensenta için izleme." },
   { title: "Vial 4 FDA PV Başlangıcı",      window: "2027 Q2 hedef",   detail: "Gensenta'nın FDA onayı yok. Vial 4 hattı için PV başlangıç hedefi Q2 2027. Bu tarih kayar veya onay süresi uzarsa ABD pazarına yönelik DP fırsat penceresi 2028+ ötelenir." },
 ];
@@ -78,7 +78,7 @@ const PORTFOLIO = [
     stars: 3 },
   { name: "Herzuma",              code: "CT-P6",      mol: "Trastuzumab",           ref: "Herceptin",         area: "HER2+ Meme Ca, Gastrik Ca",        form: "IV vial", category: "Onkoloji",
     markets: ["AB (2018)","ABD (Mar 2020)","Kore","Japonya"], extraMarkets: ["Tayvan"],
-    signal: "Herzuma SC (CT-P6 SC) EMA başvurusu Nisan 2026, Kore MFDS başvurusu Mayıs 2026. İlk SC trastuzumab biosimiları adayı.",
+    signal: "Herzuma SC (CT-P6 SC) EMA (Nis 2026) + Kore MFDS (May 2026) başvuruları yapıldı. İlk SC trastuzumab biosimiları adayı.",
     status: "IV olgun; SC form ile yeniden büyüme hedefleniyor. Global trastuzumab pazar ~$3,3B.",
     stars: 4 },
   { name: "Vegzelma",             code: "CT-P16",     mol: "Bevacizumab",           ref: "Avastin",           area: "mCRC, NSCLC, GBM, RCC, Servikal, Over Ca", form: "IV vial", category: "Onkoloji",
@@ -96,11 +96,11 @@ const PORTFOLIO = [
 // ── Pipeline ────────────────────────────────────────────────────────────────
 const PIPELINE = [
   { name: "Herzuma SC",            code: "CT-P6 SC",  type: "Biosimilar", mol: "Trastuzumab SC", ref: "Herceptin SC",      area: "HER2+ Kanser",
-    phase: "Klinik tamamlandı — EMA (Nis 2026) + Kore MFDS (28 May 2026) başvuruları yapıldı",
-    submission: "EMA (Nisan 2026) + Kore MFDS (28 May 2026) yapıldı; diğer ülkeler planlı",
+    phase: "Klinik tamamlandı — EMA (Nis 2026) + Kore MFDS (May 2026) başvuruları yapıldı",
+    submission: "EMA (Nis 2026), Kore MFDS (28 May 2026); diğer büyük pazarlar planlı",
     launch: "2027-2028 (AB & Kore)",
-    cmo: "SC PFS üretimi. Hyaluronidase platform yeni fırsat.", importance: "Yüksek",
-    news: "Kore MFDS başvurusu 28 May 2026 (EMA Nis 2026'yı takiben). Tüm Herceptin SC endikasyonları. Hyaluronidase platform. İlk SC trastuzumab biosimilar — first-mover." },
+    cmo: "SC PFS üretimi. Hyaluronidase platform yeni fırsat. AB+Kore Gensenta onaylı pazar.", importance: "Yüksek",
+    news: "Kore MFDS başvurusu 28 May 2026 (EMA'dan sonra ikinci dosya). İlk SC trastuzumab biosimiları — first-mover; Biocon Ocak 2026'da pipeline'a ekledi. Tüm Herceptin SC endikasyonları." },
   { name: "Eydenzelt ABD",         code: "CT-P42 US", type: "Biosimilar", mol: "Aflibercept",    ref: "Eylea",              area: "AMD, DME, RVO",
     phase: "FDA onaylı — patent uzlaşması Ekim 2025",
     submission: "FDA onaylı (mevcut)",
@@ -114,11 +114,11 @@ const PIPELINE = [
     cmo: "Autoinjector PFS üretim formü.", importance: "Orta",
     news: "CHMP pozitif görüş Aralık 2025. Avustralya pre-filled pen onayı Aralık 2025." },
   { name: "CT-P55",                code: "CT-P55",    type: "Biosimilar", mol: "Secukinumab",    ref: "Cosentyx",           area: "PsO, PsA, Ankilozan Spondilit",
-    phase: "Faz III devam (153 hasta); Health Canada başvurusu yapıldı (1 Haz 2026)",
-    submission: "Health Canada (1 Haz 2026) yapıldı; ABD, AB, Kore planlı",
+    phase: "İlk MA başvurusu Health Canada (1 Haz 2026); Faz III 375→153 hastaya küçültüldü",
+    submission: "Health Canada (Haz 2026); ABD, AB, Kore başvuruları planlı",
     launch: "2027-2028",
-    cmo: "SC PFS. Hızlanan regülasyon ortamında öncü ürün.", importance: "Yüksek",
-    news: "1 Haz 2026 Health Canada başvurusu (Faz 1 verisiyle; 'pro-biosimilar' pazar). ABD/AB/Kore başvuruları planlı. AB+Kore Gensenta onaylı pazarlar." },
+    cmo: "SC PFS. Dereg. (Faz III muafiyeti) ile hızlanan başvuru kadansı. Kanada Gensenta onaylı değil.", importance: "Yüksek",
+    news: "1 Haz 2026 Health Canada MA başvurusu (Faz 1 verisine dayalı; Kanada 'pro-biosimilar' pazar). ABD/AB/Kore çoklu pazar başvuru dalgası geliyor." },
   { name: "CT-P51",                code: "CT-P51",    type: "Biosimilar", mol: "Pembrolizumab",  ref: "Keytruda",           area: "NSCLC, Melanoma, HNSCC, vb.",
     phase: "Faz III başladı (MFDS Nisan 2025, N=606)",
     submission: "MFDS (Faz III onaylı), FDA IND (Ağustos 2024)",
@@ -171,8 +171,8 @@ const MARKETS = [
   { code: "KR", name: "Güney Kore",
     active: "Remsima IV/SC, Yuflyma, SteQeyma, Omlyclo, Avtozma, Eydenzelt, Truxima, Herzuma, Vegzelma, Stoboclo/Osenvelt",
     approvals: "Omlyclo (Haziran 2024), Eydenzelt (Mayıs 2024)",
-    upcoming: "Herzuma SC (MFDS başvurusu 28 May 2026 — YAPILDI), CT-P55 (Kore başvurusu planlı), CT-P51 Faz III (Nis 2025 onayı)",
-    strategy: "Ana üretim merkezi Songdo. MFDS onayları referans market olarak önce geliyor.",
+    upcoming: "Herzuma SC MFDS başvurusu yapıldı (28 May 2026); CT-P55 Kore başvurusu planlı; CT-P51 Faz III (Nisan 2025 onayı)",
+    strategy: "Ana üretim merkezi Songdo. MFDS onayları referans market olarak önce geliyor. Yeni biyobenzer onay süresi 420→295 güne kısalıyor.",
     risk: "Fırsat: Hızlı regülasyon. Risk: İç piyasada fiyat baskısı.",
     status: "aktif" },
   { code: "MENA", name: "MENA",
@@ -205,7 +205,10 @@ const NEWS = [
   { date: "Mayıs 2026",  level: "Yüksek", tag: "Herzuma SC / Kore",        url: "https://www.pearceip.law/2026/05/28/celltrion-submits-korean-application-for-biosimilar-trastuzumab-sc/", title: "Herzuma SC için Kore MFDS başvurusu yapıldı",                    detail: "28 Mayıs 2026: Nisan 2026 EMA başvurusunun ardından Kore MFDS başvurusu. Tüm Herceptin SC endikasyonları (erken/metastatik meme + metastatik gastrik). İlk SC trastuzumab biosimilar adayı — first-mover. Kore Gensenta MFDS onaylı; SC PFS formatı." },
   { date: "Mayıs 2026",  level: "Orta",   tag: "Pipeline / Strateji",      url: "https://en.sedaily.com/finance/2026/05/27/celltrion-unveils-next-generation-drug-pipeline-at-science", title: "Celltrion Science & Innovation Day 2026 — next-gen pipeline",   detail: "27 Mayıs 2026: ADC, multispesifik antikor, novel antikor/füzyon protein, peptid ve mikrobiyom terapötikleri tanıtıldı. Open innovation programları ABD, Japonya, Çin'e genişletiliyor. Çoğunlukla DS/yeni ilaç odaklı — Gensenta için dolaylı." },
   { date: "Mayıs 2026",  level: "Orta",   tag: "Hisse / Kurumsal",        url: "https://www.koreatimes.co.kr/business/companies/20260521/celltrion-to-issue-bonus-shares-repurchase-stocks-to-boost-shareholder-value", title: "Hissedar Değeri Planı: bedelsiz hisse + ₩100 milyar geri alım",  detail: "21 Mayıs 2026: 0,05 bedelsiz hisse/adet (~10,92M hisse), ~57 Mn € (₩100 milyar · Haz 2026 kuru 1.752) hisse geri alımı, Celltrion Holdings ek ₩100 milyar alım. Kurumsal/finansal — DP etkisi yok." },
-  { date: "Mayıs 2026",  level: "Kritik", tag: "Tüm portföy",             url: "https://www.celltrion.com/en-us/company/media-center/press-release/4458",                                                              title: "Q1 2026: Gelir +36%, Faaliyet Karı +115,4% YoY",                detail: "Q1 2026 konsolide gelir 654 Mn € (₩1,145T, May 2026 kuru 1.750). Remsima AB infliximab pazarında %70 paya ulaştı." },
+  { date: "Haziran 2026", level: "Kritik", tag: "CT-P55 (Secukinumab) / Kanada", url: "https://www.pearceip.law/2026/06/01/celltrion-files-canadian-application-for-biosimilar-secukinumab/", title: "CT-P55 (secukinumab) için Health Canada başvurusu — ilk MA dosyası", detail: "1 Haz 2026: Celltrion, Cosentyx biosimiları CT-P55 için Health Canada'ya tüm endikasyonlarda pazarlama izni başvurusu yaptı (Faz 1 verisine dayalı; Faz III EMA muafiyetiyle 153 hastaya küçültülmüştü). ABD, AB ve Kore başvuruları da planlı. Format: SC PFS (DP-bağlantılı). Kanada Gensenta'nın onaylı pazarı değil — izleme." },
+  { date: "Haziran 2026", level: "Yüksek", tag: "Tüm portföy / ABD",       url: "https://en.sedaily.com/news/2026/06/01/celltrions-us-direct-sales-model-takes-hold-fueling-new",  title: "ABD doğrudan satış modeli oturuyor — Q1 brüt kar +54,9%, Zymfentra reçete +185%", detail: "Q1 brüt kar 392 Mn € (₩685,8 mrd · Haz 2026 kuru 1.750), brüt marj %52,6→%59,9. Zymfentra Q1 reçete +185% YoY (rekor). Steqeyma 1 yılda %10,2 ABD payı. Ar-Ge/gelir oranı %12,3→%10,7. 3 ADC adayı Faz 1 hasta dozlamada; obezite adayı CT-G32 primat tox aşamasında." },
+  { date: "Mayıs 2026",   level: "Kritik", tag: "Herzuma SC / Kore",       url: "https://www.pearceip.law/2026/05/28/celltrion-submits-korean-application-for-biosimilar-trastuzumab-sc/", title: "Herzuma SC için Kore MFDS başvurusu (EMA'dan sonra ikinci dosya)", detail: "28 May 2026: CT-P6 SC, Kore MFDS'e tüm Herceptin SC endikasyonlarında (erken/metastatik meme, metastatik gastrik) başvuruldu. 30 Nis 2026 EMA başvurusunu takip ediyor. İlk SC trastuzumab biosimiları — first-mover. Format: SC PFS (DP-bağlantılı). Kore Gensenta MFDS onaylı pazarı." },
+  { date: "Mayıs 2026",  level: "Kritik", tag: "Tüm portföy",             url: "https://www.koreaherald.com/article/10731852",                                                              title: "Q1 2026: Rekor gelir +36%, Faaliyet Karı +115,5% YoY",                detail: "Q1 2026 konsolide gelir 654 Mn € (₩1,145T · May 2026 kuru 1.750), faaliyet marjı %28,1. 5 yeni ürün geliri 332 Mn € (₩581,2 mrd, +67% YoY) = toplam gelirin %60'ı. Omlyclo AB: Danimarka %98, İspanya %80, Hollanda %70 pay (4 ayda). Yıllık ₩5,3T gelir / ₩1,8T faaliyet kar hedefini aşması bekleniyor." },
   { date: "Nisan 2026",  level: "Kritik", tag: "Herzuma SC / AB",         url: "https://www.pearceip.law/2026/04/30/celltrion-submits-ema-application-for-trastuzumab-sc-biosimilar/", title: "Herzuma SC için EMA başvurusu yapıldı",                          detail: "İlk SC trastuzumab biosimilar adayı. Hyaluronidase platform kullanıyor. EMA süreci başladı." },
   { date: "Mart 2026",   level: "Kritik", tag: "Üretim Kapasitesi",       url: "https://www.koreaherald.com/article/10701575",                                                                title: "716 Mn € (₩1,23T) Songdo Fabrika 4 & 5 yatırımı açıklandı",       detail: "TAMAMEN DS (biyoreaktör) kapasitesi: 316K → 571K litre/yıl. Bu yatırım DP (steril dolum) kapasitesi değildir. Ayrı bir Songdo Yeni DP Plant 2027'de devreye alınacak (6,5M vial/yıl). Gensenta açısından: DS artışı → DP dolum ihtiyacı artar = Fırsat." },
   { date: "Mart 2026",   level: "Yüksek", tag: "Avtozma / ABD",           url: "https://www.pearceip.law/2026/03/17/celltrions-tocilizumab-biosimilar-sc-formulation-launched-in-us/",          title: "Avtozma SC ABD lansmanı — IV+SC çift formülasyon",               detail: "ABD'de hem IV hem SC onaylı ilk tocilizumab biosimilarlarından biri oldu." },
@@ -240,8 +243,8 @@ const RISKS = [
     action: "İZLEME: Eydenzelt için kısa vadeli ABD DP teklifi mümkün değil. Doğru yorum: 'FDA onayı sonrası potansiyel fırsat'. Vial 4 FDA PV süreci (Q2 2027+) tamamlandığında re-değerlendirilecek; bu arada Celltrion'un ABD DP tedarikçi tercihini izle.",
     sources: [{label:"Big Molecule Watch — Regeneron patent uzlaşması (Eki 2025)", url:"https://www.bigmoleculewatch.com/2025/10/14/fda-approves-celltrions-aflibercept-biosimilar/"},{label:"Pearce IP — Eydenzelt AB & UK lansmanı (Ara 2025)", url:"https://www.pearceip.law/2025/12/16/celltrion-launches-biosimilar-aflibercept-in-eu-uk/"},{label:"Gensenta GMP Profili — FDA PV hedefi Q2 2027", url:""}] },
   { topic: "SC/PFS formülasyon dalgası — Herzuma SC, CT-P55, Avtozma SC", type: "Fırsat", impact: "Çok Yüksek", likelihood: "Yüksek",
-    meaning: "[Fırsat seviyesi arttı] Herzuma SC (EMA Nis 2026 + Kore MFDS 28 May 2026 başvuruları), CT-P55 (Health Canada başvurusu 1 Haz 2026; ABD/AB/Kore planlı), Avtozma SC (ABD lansmanı Mar 2026) ile SC/PFS formatı çok-bölge başvurularla hız kazanıyor. Celltrion bu formatlarda DP dolum kapasitesini dışarıdan temin etmeye devam edecek.",
-    action: "FIRSAT: Gensenta'nın PFS veya SC vial dolum kabiliyeti varsa Celltrion'un SC CDMO ekibiyle temas önceliklendirilmeli. Herzuma SC + CT-P55'in AB/Kore başvuruları Gensenta'nın onaylı pazarlarında — hazırlık penceresi dar.",
+    meaning: "Format dalgası hızlanıyor: Herzuma SC EMA (Nis 2026) + Kore MFDS (May 2026) başvuruları yapıldı — ikisi de Gensenta onaylı pazar. CT-P55 (secukinumab SC PFS) Health Canada başvurusu (Haz 2026) ile çoklu pazar dosya dalgası başladı; ABD/AB/Kore sırada. Avtozma SC (ABD lansmanı Mart 2026) zaten ticari. Biosimilar deregülasyonu (Faz III muafiyeti) başvuru kadansını kısaltıyor. Celltrion bu formatlarda DP dolum kapasitesini dışarıdan temin etmeye devam edecek.",
+    action: "FIRSAT: Gensenta'nın PFS/SC dolum kabiliyeti varsa Celltrion SC CDMO ekibiyle temas önceliklendirilmeli. Herzuma SC AB+Kore kanalı en somut yakın vadeli SC fırsatı (her iki pazar Gensenta onaylı). Hazırlık penceresi dar (lansman 2027).",
     sources: [{label:"Pearce IP — Herzuma SC Kore MFDS başvurusu (May 2026)", url:"https://www.pearceip.law/2026/05/28/celltrion-submits-korean-application-for-biosimilar-trastuzumab-sc/"},{label:"Pearce IP — CT-P55 Health Canada başvurusu (Haz 2026)", url:"https://www.pearceip.law/2026/06/01/celltrion-files-canadian-application-for-biosimilar-secukinumab/"},{label:"Pearce IP — Herzuma SC EMA başvurusu (Nis 2026)", url:"https://www.pearceip.law/2026/04/30/celltrion-submits-ema-application-for-trastuzumab-sc-biosimilar/"}] },
   { topic: "CT-P51 (Keytruda biosimilar) — Uzun Vade DP Fırsatı", type: "Fırsat", impact: "Çok Yüksek", likelihood: "Düşük",
     meaning: "$30B+ referans pazar; başarılı olursa tarihin en büyük biosimilar lansmanı. IV infüzyon vial formatı Gensenta'nın uzmanlık alanı. ABD patenti 2029, AB 2031.",
@@ -263,10 +266,10 @@ const RISKS = [
     meaning: "Celltrion'un ayrı bir Songdo Yeni DP Plant'ı 2027'de ticari üretime giriyor (6,5M vial/yıl). Yesan tesisi ile birlikte DP içselleştirme oranı artıyor. Gensenta'nın DS artışından kaynaklanan DP dolum fırsatları devam ederken, Yeni DP Plant devreye girdikçe bazı vial formatlarında CMO payı azalabilir.",
     action: "TAKİP: Yesan ve Songdo DP hattı yatırım duyurularını izle. Mevcut sözleşme kapsamını uzun vadeye bağla; spot değil, çerçeve anlaşma tercih et.",
     sources: [{label:"Celltrion — Songdo Fabrika 4&5 Yatırımı (Mar 2026)", url:"https://www.koreaherald.com/article/10701575"}] },
-  { topic: "Rekabet: Diğer steril flakon CMO'ları", type: "Risk", impact: "Orta", likelihood: "Yüksek",
-    meaning: "Celltrion'un DP fason ihtiyaçları için Avrupa ve Asya'dan rakip CMO'lar da teklif veriyor. Fiyat, kapasite esnekliği ve regülasyonel sertifikasyon belirleyici.",
-    action: "RİSK: Gensenta'nın AB-GMP sertifikasyonu (EMA/AIFA + AEMPS), PMDA, MFDS, ANVISA, SFDA, Russia ve Türkiye onayları öne çıkarılmalı. Tekliflerde teslimat hızı ve esneklik vurgulanmalı.",
-    sources: [] },
+  { topic: "Rekabet: Diğer steril flakon CMO'ları + Çinli CDMO'lar", type: "Risk", impact: "Orta", likelihood: "Yüksek",
+    meaning: "Celltrion'un DP fason ihtiyaçları için Avrupa ve Asya'dan rakip CMO'lar teklif veriyor. Haz 2026: Çinli CDMO'lar (Chime Biologics, WuXi Biologics) fiyat + büyük ölçekli kapasite + antikor geliştirme tecrübesiyle Kore biotech'ine (Daewoong, Y-Biologics, MedPacto) agresif giriyor — fason fiyat baskısı sektör genelinde artıyor. Bu doğrudan Celltrion DP'si değil ama Gensenta'nın rekabet ettiği fiyat zeminini aşağı çekiyor.",
+    action: "RİSK: Gensenta'nın AB-GMP sertifikasyonu (EMA/AIFA + AEMPS), PMDA, MFDS, ANVISA, SFDA, Russia ve Türkiye onayları öne çıkarılmalı. Çinli CDMO fiyat baskısına karşı regülasyonel güven + AB/Japonya/Kore pazarına yakınlık + teslimat hızı ile farklılaş.",
+    sources: [{label:"Seoul Economic Daily — Çinli CDMO'lar Kore biotech'ini hedefliyor (Haz 2026)", url:"https://en.sedaily.com/finance/2026/06/03/chinese-cdmos-court-korean-biotech-with-price-capacity-edge"}] },
   { topic: "EMA pazarı — Gensenta'nın en güçlü GMP onay tabanı", type: "Fırsat", impact: "Çok Yüksek", likelihood: "Yüksek",
     meaning: "Gensenta'nın EMA onaylı GMP sertifikası (AIFA İtalya + AEMPS İspanya) Avrupa-bound Celltrion DP'si için en güçlü argüman. Remsima IV liquid (Mart 2026 AB lansman), Avtozma IV (Oca 2026 AB), SteQeyma autoinjector (CHMP olumlu Ara 2025), Eydenzelt AB lansmanı (Ara 2025), Herzuma SC (EMA başvurusu Nis 2026) — hepsi EMA-bound. Bu, kısa vadede en somut Gensenta fırsatı.",
     action: "FIRSAT: AB pazarına yönelik DP teklifi Celltrion ile en öncelikli görüşme konusu olmalı. Vegzelma, Truxima, Avtozma IV, Steqeyma IV, Eydenzelt — Gensenta'nın liquid/lyo vial kabiliyetiyle birebir uyumlu, EMA onaylı.",
@@ -292,11 +295,9 @@ const RISKS = [
 // ── Signals ─────────────────────────────────────────────────────────────────
 const SIGNALS = [
   { title: "Vial 4 FDA PV Başlangıcı (Gensenta)", urgency: "Acil",   window: "2027 Q2 hedef",     detail: "Gensenta'nın FDA onayı yok. Vial 4 hattı için PV başlangıç hedefi Q2 2027. Bu tarihteki sapma veya onay süresinin uzaması ABD-bound DP fırsatlarının (Eydenzelt ABD, vb.) tüm timeline'ını öteleyecek. En kritik iç sinyal." },
-  { title: "Herzuma SC EMA + Kore MFDS Onayı", urgency: "Acil",      window: "2026 Q3-Q4 → 2027",  detail: "EMA başvurusu Nis 2026 + Kore MFDS başvurusu 28 May 2026 yapıldı. CHMP pozitif görüş ~12-15 ay sonra. İlk SC trastuzumab biosimilar — first-mover. Gensenta EMA + MFDS onaylı (İtalya + İspanya + Kore) — AB ve Kore DP teklifi için kanal açık." },
-  { title: "CT-P55 Çok-Bölge Başvuru Dalgası", urgency: "Yakın Dönem", window: "2026-2027",        detail: "Health Canada başvurusu 1 Haz 2026 yapıldı; ABD, AB, Kore başvuruları planlı. AB + Kore Gensenta onaylı pazarlar — SC PFS formatlı ileride DP sinyali. Faz boyutu küçültüldüğü için timeline hızlı." },
+  { title: "Herzuma SC EMA Onayı",          urgency: "Acil",         window: "2026 Q3-Q4",        detail: "EMA başvurusu Nisan 2026'da yapıldı. CHMP pozitif görüş ~12-15 ay sonra bekleniyor. Gensenta EMA onaylı (İtalya + İspanya) — AB DP teklifi için kanal açık." },
   { title: "SteQeyma Autoinjector AB Onayı",urgency: "Acil",         window: "2026 Q2",           detail: "CHMP pozitif görüş Aralık 2025. EC onayı 2-3 ay içinde bekleniyor. EMA-bound." },
   { title: "Eydenzelt ABD Lansmanı",        urgency: "İzleme",       window: "2026 Q4 — 2027 H1", detail: "Regeneron uzlaşması 31 Aralık 2026 sonrasını veriyor. Gensenta FDA onayı olmadan kısa vadede fiili DP teklifi mümkün değil; Vial 4 PV (Q2 2027+) sonrası re-değerlendirme. Bu arada Celltrion'un seçtiği ABD DP tedarikçisini izle." },
-  { title: "CT-G32 Obezite/Metabolik Platform", urgency: "Orta Vade", window: "IND 2027 H1",     detail: "Quadruple-agonist GLP-1 obezite adayı, primat toksikoloji başladı (29 May 2026). Oral obezite adayı IND 2028 H2. Yeni ilaç/peptid — DP vial fason yakın vadede değil; uzun vadede yeni format/hacim sinyali. Scohia Pharma (Japonya) iş birliği." },
   { title: "Songdo Fabrika 4-5 İnşaat Takvimi", urgency: "Yakın Dönem", window: "2026-2030",     detail: "2030'a kadar fazlı inşaat. DS yatırımı — Gensenta için doğrudan risk değil, dolaylı hacim sinyali. Her aşama haberi kapasite tahsisi konusunda sinyal verir." },
   { title: "Songdo Yeni DP Plant Devreye Alma", urgency: "Yakın Dönem", window: "2027 ticari üretim", detail: "6.5M vial/yıl DP kapasitesi. Hangi ürünlerin ilk içselleştirileceği (Truxima, Vegzelma, Eydenzelt, Steqeyma IV, Avtozma IV) Gensenta için doğrudan hacim sinyali." },
   { title: "CT-P55 (Cosentyx) Faz III",     urgency: "Yakın Dönem",  window: "2026-2027",         detail: "Hasta sayısı 375→153 indirildi. Hız ivmesi Celltrion pipeline süreçleri hızlanacağına işaret ediyor." },
@@ -305,6 +306,10 @@ const SIGNALS = [
   { title: "Branchburg NJ — DP Hattı?",     urgency: "Yakın Dönem",  window: "Çeyreklik IR'lar",  detail: "Şu an sadece DS. Tarife rejimi nedeniyle Celltrion'un Branchburg'a DP/fill-finish hattı eklemesi muhtemel; eklerse ABD-bound iş için Türkiye/AB'den ABD'ye kayma başlar. CapEx breakdown'larda izle." },
   { title: "Japonya Yeni Lansmanlar (PMDA)",urgency: "Orta Vade",    window: "2026 yıl boyu",     detail: "Omlyclo, Eydenzelt, Avtozma, Steqeyma IV onayları. Gensenta PMDA onaylı — Japonya DP teklifleri somutlaştırılabilir." },
   { title: "Halozyme Hyaluronidase Patent Bitişi", urgency: "Orta Vade", window: "2027",          detail: "Patent bitişi sonrası ikinci SC dönüşüm dalgası bekleniyor. Herzuma SC sonrası Avtozma SC, Yuflyma SC, Vegzelma SC gibi ek SC formülasyonlar gelebilir — IV hacmi aşınma riski." },
+  { title: "Biosimilar Deregülasyonu (Faz III Muafiyeti)", urgency: "Yakın Dönem", window: "2026 yıl boyu", detail: "ABD/AB/Kanada/Kore regülatörleri biosimilar onayında karşılaştırmalı klinik etkinlik çalışmalarını gevşetiyor (analitik veri yeterliyse Faz III muafiyeti). Celltrion ana faydalanan; CT-P55 Faz III'ü 375→153'e indirdi, başvuru kadansı kısalıyor. Daha hızlı lansman → orta vadede daha fazla DP dolum talebi." },
+  { title: "CT-P55 Çoklu Pazar Başvuru Dalgası", urgency: "Yakın Dönem", window: "2026 H2", detail: "Health Canada başvurusu (Haz 2026) yapıldı; ABD, AB ve Kore başvuruları planlı. SC PFS formatı. AB ve Kore dosyaları açıldığında (Gensenta onaylı pazarlar) DP/PFS fırsatı somutlaşır; Kanada Gensenta kapsamı dışında." },
+  { title: "Çinli CDMO Rekabeti (Sektörel)", urgency: "İzleme", window: "Sürekli", detail: "Chime Biologics + WuXi Biologics fiyat/kapasite avantajıyla Kore biotech'ine giriyor (Daewoong-Dupixent biosimilar, Y-Biologics, MedPacto). Doğrudan Celltrion değil ama fason DP fiyat zeminini aşağı çekiyor — Gensenta teklif fiyatlamasında izlenmeli." },
+  { title: "Celltrion İlk Sendika + ₩100 mrd Buyback", urgency: "İzleme", window: "Haz 2026", detail: "Celltrion'da kuruluştan bu yana ilk sendika kuruldu (PS/ücret talepleri); ayrıca ~10,9M bedelsiz hisse + ₩100 mrd treasury buyback (8 Haz başlangıç). DP etkisi yok; üretim sürekliliği ve sermaye tahsisi açısından düşük öncelikli izleme." },
 ];
 
 // ── Financial ───────────────────────────────────────────────────────────────
@@ -350,7 +355,6 @@ const EXPECTATIONS = [
   "DS üretimi: 316.000 L → 571.000 L (2030 sonrası); %100 DS internalizasyonu 2031 hedefi",
   "DP üretimi: Songdo yeni hat + Yesan tesisi ile %90 internalizasyon",
   "CMO geliri: Eli Lilly ($473M) + ikinci anonim partner ($199M) + CDMO büyümesi",
-  "Next-gen pipeline (Science & Innovation Day 2026): ADC, multispesifik antikor, novel antikor/füzyon protein, peptid, mikrobiyom; open innovation ABD/Japonya/Çin'e genişliyor",
   "R&D yatırımı 2025'te gelirin ~%19'u; ADC ve msAb platformlarına öncelik",
 ];
 
@@ -363,43 +367,4 @@ const CENK_INSIGHTS = [
   { tag: "İzleme", title: "ABD Lansmanları — Gensenta FDA Onayı Sonrası (2028+) Re-değerlendirme",
     body: "Gensenta'nın FDA onayı henüz yok. Vial 4 hattı için FDA PV hedef başlangıcı Q2 2027; onay süreci PV başlangıcından sonra da zaman alıyor. Bu yüzden ABD'ye yönelik tüm Celltrion lansmanları — Eydenzelt (31 Ara 2026), Avtozma SC (Mart 2026), Stoboclo/Osenvelt ABD büyümesi, Zymfentra ABD hacim artışı — kısa vadede Gensenta için fiili DP fırsatı oluşturmuyor. Doğru çerçeveleme: 'FDA onayı sonrası potansiyel fırsat'. En erken fiili senaryo 2028+. Bu süreçte Celltrion'un Branchburg'a DP hattı eklenip eklenmediği yakından izlenmeli." },
   { tag: "Fırsat", title: "Japonya (PMDA) + Kore (MFDS) + Brezilya (ANVISA) + Suudi (SFDA) — Onaylı pazar çoğul kanal",
-    body: "Gensenta'nın GMP onay portföyü Türkiye + EMA (İtalya + İspanya) + PMDA + MFDS + ANVISA + SFDA + Rusya'yı kapsıyor. Celltrion'un büyüme stratejisi bu pazarların hepsinde aktif: Japonya'da Vegzelma %50, Remsima %43, Herzuma %72 pazar payı; Kore MFDS onay süresi 420→295 güne kısalıyor; Brezilya LATAM bridgehead'i; Suudi/MENA Hikma ortaklığı. Bu pazarlara yönelik vial-formatlı DP teklifleri (Vegzelma, Truxima, Avtozma IV, Steqeyma IV, Eydenzelt) somut görüşme açabilir." },
-  { tag: "Karma", title: "Format kayması — SC/PFS dalgası çok-bölge başvurularla hızlanıyor",
-    body: "Celltrion SC stratejisi çok-bölge başvurularla hızlanıyor: Herzuma SC (EMA Nis 2026 + Kore MFDS 28 May 2026), CT-P55 (Health Canada 1 Haz 2026; ABD/AB/Kore planlı), Avtozma SC (ABD Mar 2026), Halozyme hyaluronidase patenti 2027'de bitiyor. SC/PFS formatları Gensenta'nın yüksek öncelikli kabiliyet alanı dışında ise: (a) IV vial hacmi SC'ye kaydıkça mevcut Herzuma/Avtozma IV iş hacmi aşınabilir; (b) yeni SC/PFS fırsatları paralel rakiplere kayıyor olabilir. Önemli not: Herzuma SC ve CT-P55'in AB + Kore başvuruları Gensenta'nın onaylı pazarlarında — PFS/SC dolum kabiliyeti kazanılırsa bunlar somut fırsata döner. Halozyme patent bitişi (2027) sonrası ikinci SC dönüşüm dalgasına hazırlık şart." },
-];
-const CENK_ACTIONS = [
-  { text: "EMA pazarı (İtalya + İspanya GMP) için Avtozma IV, Vegzelma, Steqeyma IV, Eydenzelt AB DP teklif paketi hazırla", when: "Acil" },
-  { text: "Mevcut Celltrion DS/DP sözleşme kapsamını ve vade tarihlerini gözden geçir", when: "Acil" },
-  { text: "Japonya (PMDA) + Kore (MFDS) Celltrion DP tedarik görüşmesi aç — vial-formatlı ürünlere odaklan", when: "Acil" },
-  { text: "CT-P55 (sekukinumab) AB + Kore başvurularını izle — Gensenta onaylı pazarlarda SC/PFS DP fırsatı adayı", when: "Yakın" },
-  { text: "Hikma MENA tedarik zinciri görüşmesi — SFDA onayını öne çıkararak", when: "Yakın" },
-  { text: "Brezilya (ANVISA) Celltrion DP fırsatı — Herzuma, Vegzelma, Truxima için araştır", when: "Yakın" },
-  { text: "Vial 4 FDA PV (Q2 2027 hedef) timeline'ını sıkı takip et — ABD fırsat penceresi PV sonrası açılır", when: "Yakın" },
-  { text: "Branchburg NJ tesisinde DP/fill-finish hattı eklenip eklenmediğini IR sunumlarından izle", when: "Yakın" },
-  { text: "Songdo yeni DP plant (2027 ticari üretim) ürün taşıma sırası — hangi ürünler ilk içselleştirilecek", when: "Orta" },
-  { text: "Halozyme hyaluronidase patent bitişi (2027) sonrası SC dönüşüm dalgasına PFS/SC kabiliyet hazırlığı", when: "Orta" },
-  { text: "CT-P51 (Keytruda) IV vial 2029-2030 DP üretim hazırlığı için takip listesine al", when: "Uzun Vade" },
-  { text: "Vial 4 FDA onayı sonrası (2028+) ABD'ye yönelik Celltrion DP teklif paketi hazırla", when: "Uzun Vade" },
-];
-
-// ── Sources used in this update ─────────────────────────────────────────────
-// Bu liste her aylık güncellemede o ay kullanılan kaynaklara göre yenilenir.
-// Sıralama önem sırasına göre: resmi şirket / regülatör / sektör yayını / haber.
-const SOURCES_USED = [
-  "Celltrion IR",
-  "Pearce IP",
-  "Seoul Economic Daily",
-  "Korea Herald",
-  "Korea Times",
-];
-
-// ── Last update timestamp ───────────────────────────────────────────────────
-const LAST_UPDATED = "3 Haziran 2026, Çarşamba";
-
-Object.assign(window, {
-  KPIS, STRATEGIC_DIRECTIONS, RECENT_DEVELOPMENTS, URGENT_SIGNALS,
-  PORTFOLIO, PIPELINE, MARKETS, NEWS, RISKS, SIGNALS,
-  REVENUE_SERIES, OPPROFIT_SERIES, PRODUCT_MIX, GROWTH_SIGNALS, EXPECTATIONS,
-  CENK_INSIGHTS, CENK_ACTIONS,
-  SOURCES_USED, LAST_UPDATED,
-});
+    body: "Gensenta'nın GMP onay portföyü Türkiye + EMA (İtalya + İspanya) + PMDA + MFDS + ANV
