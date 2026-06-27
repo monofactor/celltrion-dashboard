@@ -3,6 +3,22 @@
 
 const { useState, useMemo } = React;
 
+// Rapor dönemi: güncelleme her ayın 1'inde yapılır; rapor bir ÖNCEKİ ayı kapsar.
+// window.LAST_UPDATED (ör. "3 Haziran 2026, Çarşamba") -> "Mayıs 2026".
+const TR_MONTHS = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+const REPORT_PERIOD = (() => {
+  try {
+    const m = String(window.LAST_UPDATED || "").match(/(\d{1,2})\s+(\S+)\s+(\d{4})/);
+    if (!m) return "";
+    let idx = TR_MONTHS.indexOf(m[2]);
+    let year = parseInt(m[3], 10);
+    if (idx === -1) return "";
+    idx -= 1;
+    if (idx < 0) { idx = 11; year -= 1; }
+    return TR_MONTHS[idx] + " " + year;
+  } catch (e) { return ""; }
+})();
+
 // ── Minimal inline icons (lucide-style 24×24 strokes) ───────────────────────
 const I = {
   Home: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg>),
@@ -27,6 +43,8 @@ const I = {
   AlertTriangle: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>),
   Shuffle: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>),
   Factory: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M17 18h1"/><path d="M12 18h1"/><path d="M7 18h1"/></svg>),
+  Info: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>),
+  Crosshair: (p) => (<svg {...p} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/><circle cx="12" cy="12" r="2.5"/></svg>),
 };
 
 // ── Brand logo (Celltrion mark, embedded as data URL) ───────────────────────
@@ -45,6 +63,15 @@ function BrandLogo({ size = 28 }) {
 // ── SVG Flag (renders consistently across OS/browsers) ──────────────────────
 function Flag({ code, size = 22 }) {
   const w = size, h = Math.round(size * 0.72);
+  const triBar = (yc, broken, key) => broken
+    ? [<rect key={key + "a"} x={-4} y={yc - 0.65} width={3.3} height={1.3}/>,
+       <rect key={key + "b"} x={0.7} y={yc - 0.65} width={3.3} height={1.3}/>]
+    : <rect key={key} x={-4} y={yc - 0.65} width={8} height={1.3}/>;
+  const Trigram = ({ cx, cy, rot, pat }) => (
+    <g transform={`translate(${cx} ${cy}) rotate(${rot})`} fill="#0A0A0A">
+      {pat.map((b, i) => triBar((i - 1) * 2.6, b, "t" + i))}
+    </g>
+  );
   const flags = {
     US: (
       <svg width={w} height={h} viewBox="0 0 60 40">
@@ -75,10 +102,16 @@ function Flag({ code, size = 22 }) {
     KR: (
       <svg width={w} height={h} viewBox="0 0 60 40">
         <rect width="60" height="40" fill="white"/>
-        <g transform="translate(30 20) rotate(-33)">
-          <path d="M -9 0 A 9 9 0 0 1 9 0 A 4.5 4.5 0 0 1 0 0 A 4.5 4.5 0 0 0 -9 0 Z" fill="#CD2E3A"/>
-          <path d="M -9 0 A 9 9 0 0 0 9 0 A 4.5 4.5 0 0 0 0 0 A 4.5 4.5 0 0 1 -9 0 Z" fill="#0047A0"/>
+        {/* Taegeuk: kırmızı (yang) üst-sol, mavi (eum) alt-sağ */}
+        <g transform="translate(30 20) rotate(33.69)">
+          <path d="M0,-8 a4,4 0 0,1 0,8 a4,4 0 0,0 0,8 a8,8 0 0,1 0,-16 Z" fill="#CD2E3A"/>
+          <path d="M0,-8 a4,4 0 0,0 0,8 a4,4 0 0,1 0,8 a8,8 0 0,0 0,-16 Z" fill="#0047A0"/>
         </g>
+        {/* Dört trigram — köşeler: ☰ Geon(ÜS), ☵ Gam(ÜSağ), ☲ Ri(ASol), ☷ Gon(ASağ) */}
+        <Trigram cx={15} cy={11} rot={-56.31} pat={[false, false, false]}/>
+        <Trigram cx={45} cy={11} rot={56.31} pat={[true, false, true]}/>
+        <Trigram cx={15} cy={29} rot={56.31} pat={[false, true, false]}/>
+        <Trigram cx={45} cy={29} rot={-56.31} pat={[true, true, true]}/>
         <rect width="60" height="40" fill="none" stroke="#e5e7eb" strokeWidth="1"/>
       </svg>
     ),
@@ -131,7 +164,7 @@ function Flag({ code, size = 22 }) {
   );
 }
 
-// ── Ribbon nav (Linery Office-style) ────────────────────────────────────────
+// ── Sidebar nav items (Linery Office-style) ─────────────────────────────────
 const NAV_ITEMS = [
   { id: "summary",   label: "Yönetici Özeti",      icon: I.Home },
   { id: "portfolio", label: "Ürün Portföyü",       icon: I.Package },
@@ -139,68 +172,71 @@ const NAV_ITEMS = [
   { id: "markets",   label: "Market Haritası",     icon: I.Globe },
   { id: "news",      label: "Haber Akışı",         icon: I.Newspaper },
   { id: "risks",     label: "Fırsat / Risk Matrisi", icon: I.AlertTriangle },
+  { id: "radar",     label: "Fırsat Radarı",        icon: I.Crosshair },
   { id: "signals",   label: "İzlenecek Sinyaller", icon: I.Radar },
   { id: "financial", label: "Finansal Sinyaller",    icon: I.TrendUp },
   { id: "cenk",      label: "Gensenta için Yorum",   icon: I.MsgSquare },
 ];
 
-function Ribbon({ active, onChange }) {
+// ── Left vertical sidebar (Linery Office-style) ─────────────────────────────
+function Sidebar({ active, onChange }) {
   return (
-    <div className="bg-white border-b border-gray-200 sticky top-0 z-30">
-      {/* Top brand strip */}
-      <div className="bg-gray-50 border-b border-gray-200">
-        <div className="max-w-page mx-auto px-6 h-12 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <BrandLogo size={22} />
-            <div className="leading-tight">
-              <div className="text-[13px] font-semibold text-gray-900">Celltrion Dashboard</div>
-              <div className="text-[11px] text-gray-500">Gensenta · 2026 Stratejik İzleme</div>
+    <aside className="w-64 shrink-0 bg-white border-r border-gray-200 sticky top-0 h-screen flex flex-col z-30">
+      {/* Brand block */}
+      <div className="px-4 h-16 flex items-center gap-3 border-b border-gray-200 shrink-0">
+        <BrandLogo size={26} />
+        <div className="leading-tight min-w-0">
+          <div className="text-[13px] font-semibold text-gray-900 truncate">Celltrion Dashboard</div>
+          <div className="text-[11px] text-gray-500 truncate">Gensenta · 2026 Stratejik İzleme</div>
+        </div>
+      </div>
+      {/* Vertical nav */}
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+        {NAV_ITEMS.map((it) => {
+          const Icon = it.icon;
+          const isActive = active === it.id;
+          return (
+            <button
+              key={it.id}
+              type="button"
+              onClick={() => onChange(it.id)}
+              aria-current={isActive ? "page" : undefined}
+              className={`group relative w-full flex items-center gap-3 pl-4 pr-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                isActive
+                  ? "bg-blue-50 text-blue-700"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+              }`}
+            >
+              {isActive && (
+                <span className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full bg-blue-600" />
+              )}
+              <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-blue-600" : "text-gray-400 group-hover:text-gray-600"}`} />
+              <span className="truncate">{it.label}</span>
+            </button>
+          );
+        })}
+      </nav>
+      {/* Sidebar footer: meta (son güncelleme + kaynak) + brand */}
+      <div className="px-4 py-4 border-t border-gray-200 shrink-0 space-y-3">
+        <div className="space-y-2 text-[11px] leading-snug">
+          <div>
+            <div className="inline-flex items-center gap-1.5 text-gray-400">
+              <I.Cloud className="w-3.5 h-3.5 text-teal-600"/>Son güncelleme
+            </div>
+            <div className="font-semibold text-gray-900 mt-0.5">{window.LAST_UPDATED || "\u2014"}</div>
+          </div>
+          <div>
+            <div className="text-gray-400">Kaynak</div>
+            <div className="font-medium text-gray-700 mt-0.5">
+              {(window.SOURCES_USED && window.SOURCES_USED.length > 0)
+                ? window.SOURCES_USED.join(" \u00b7 ")
+                : "\u2014"}
             </div>
           </div>
-          <div className="flex items-center gap-4 text-xs text-gray-600">
-            <span className="inline-flex items-center gap-1.5">
-              <I.Cloud className="w-3.5 h-3.5 text-teal-600"/>
-              Son güncelleme
-              <span className="font-semibold text-gray-900 ml-1">
-                {window.LAST_UPDATED || "—"}
-              </span>
-            </span>
-            <div className="w-px h-4 bg-gray-300"/>
-            <span className="text-gray-500">Kaynak</span>
-            <span className="font-medium text-gray-700">
-              {(window.SOURCES_USED && window.SOURCES_USED.length > 0)
-                ? window.SOURCES_USED.join(" · ")
-                : "—"}
-            </span>
-          </div>
         </div>
+        <img src={window.LINERY_LOGO} alt="Linery" style={{ height: 42, width: "auto", display: "block", opacity: 0.85 }} />
       </div>
-      {/* Tab row */}
-      <div className="max-w-page mx-auto px-2">
-        <div className="flex items-stretch overflow-x-auto no-scrollbar" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-          {NAV_ITEMS.map((it) => {
-            const Icon = it.icon;
-            const isActive = active === it.id;
-            return (
-              <button
-                key={it.id}
-                type="button"
-                onClick={() => onChange(it.id)}
-                style={{
-                  borderBottomColor: isActive ? "#2563eb" : "transparent",
-                  color: isActive ? "#1d4ed8" : "#374151",
-                  background: isActive ? "#ffffff" : "transparent",
-                }}
-                className="relative flex items-center gap-2 px-5 py-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2 hover:text-blue-700 hover:bg-gray-50"
-              >
-                <Icon className="w-4 h-4"/>
-                {it.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </div>
+    </aside>
   );
 }
 
@@ -221,10 +257,17 @@ function PageShell({ title, subtitle, actions, children }) {
 }
 
 // ── KPI card ────────────────────────────────────────────────────────────────
-function KPI({ label, value, delta, sub, tone = "blue" }) {
+function KPI({ label, value, delta, sub, tone = "blue", info }) {
   return (
-    <div className={`kpi kpi-${tone}`}>
-      <div className="kpi-label">{label}</div>
+    <div className={`kpi kpi-${tone}${info ? " kpi-tip" : ""}`}>
+      <div className="kpi-label">
+        {info ? (
+          <span className="tip-wrap" tabIndex={0}>
+            <span className="tip-label">{label}</span>
+            <span className="tip-bubble" role="tooltip">{info}</span>
+          </span>
+        ) : label}
+      </div>
       <div className="kpi-value">{value}</div>
       <div className="mt-2 space-y-0.5">
         {delta && (
@@ -321,5 +364,5 @@ function Card({ children, className = "", title, subtitle, action }) {
 }
 
 Object.assign(window, {
-  I, BrandLogo, Flag, Ribbon, NAV_ITEMS, PageShell, KPI, Pill, Stars, FilterChips, FilterBar, Card,
+  I, BrandLogo, Flag, Sidebar, NAV_ITEMS, PageShell, KPI, Pill, Stars, FilterChips, FilterBar, Card,
 });

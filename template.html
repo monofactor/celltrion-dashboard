@@ -44,6 +44,18 @@
 
   /* Linery KPI card variants */
   .kpi { position: relative; overflow: hidden; padding: 1rem 1.25rem; border-radius: 0.75rem; border: 1px solid; }
+  /* Bilgi balonu (tooltip) — standart: ürün karması hover kartıyla aynı dil
+     (beyaz zemin, gri border, rounded-lg, shadow-xl, gri-600 metin) */
+  .kpi.kpi-tip { overflow: visible; }
+  .tip-wrap { position: relative; display: inline-block; cursor: help; }
+  .tip-wrap > .tip-label { text-decoration: underline dotted; text-decoration-color: #cbd5e1; text-underline-offset: 2px; }
+  .tip-bubble { position: absolute; top: calc(100% + 8px); left: -4px; width: 280px;
+    background: #ffffff; color: #4b5563; border: 1px solid #e5e7eb; border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgba(15,23,42,.12), 0 8px 10px -6px rgba(15,23,42,.10);
+    font-size: 12px; line-height: 1.6; font-weight: 400; text-transform: none; letter-spacing: normal;
+    padding: 0.625rem 0.75rem; opacity: 0; visibility: hidden; transform: translateY(4px);
+    transition: opacity .15s ease, transform .15s ease; z-index: 60; pointer-events: none; white-space: normal; }
+  .tip-wrap:hover .tip-bubble, .tip-wrap:focus-within .tip-bubble { opacity: 1; visibility: visible; transform: translateY(0); }
   .kpi-label { font-size: 0.75rem; font-weight: 500; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em; }
   .kpi-value { font-size: 1.875rem; font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; margin-top: 0.5rem; }
   .kpi-sub { font-size: 0.75rem; color: #64748b; margin-top: 0.5rem; }

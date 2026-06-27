@@ -1,0 +1,9 @@
+# Gizli / yerel — GitHub'a push edilmez (Gensenta gizli iç bağlam)
+celltrion-intelligence-dashboard.skill
+*.skill
+CHANGELOG-*.md
+.claude/
+# Yedek / geçici
+*.bak
+data.jsx.broken-concurrent.bak
+outputs/

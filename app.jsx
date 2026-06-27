@@ -1,5 +1,5 @@
 /* global React, ReactDOM, window */
-// Entry point — routes ribbon nav to page components, hash-routed.
+// Entry point — routes sidebar nav to page components, hash-routed.
 
 const { useState: useAppState, useEffect: useAppEffect } = React;
 
@@ -30,21 +30,23 @@ function App() {
     markets: PageMarkets,
     news: PageNews,
     risks: PageRisks,
+    radar: PageRadar,
     signals: PageSignals,
     financial: PageFinancial,
     cenk: PageCenk
   }[page] || PageSummary;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Ribbon active={page} onChange={navigate} />
-      <main data-screen-label={page}>
-        <Page />
-      </main>
-      <footer className="max-w-page mx-auto px-6 py-8 text-[11px] text-gray-400 border-t border-gray-200 mt-12 flex items-center justify-between">
-        <span>Celltrion Dashboard · Mayıs 2026</span>
-        <img src={window.LINERY_LOGO} alt="Linery" style={{ height: 54, width: "auto", display: "block" }} />
-      </footer>
+    <div className="min-h-screen bg-gray-50 flex">
+      <Sidebar active={page} onChange={navigate} />
+      <div className="flex-1 min-w-0 flex flex-col min-h-screen">
+        <main data-screen-label={page} className="flex-1">
+          <Page />
+        </main>
+        <footer className="max-w-page mx-auto w-full px-6 py-8 text-[11px] text-gray-400 border-t border-gray-200 mt-12 flex items-center justify-between">
+          <span>Celltrion Dashboard · Gensenta Stratejik İzleme</span>
+        </footer>
+      </div>
     </div>);
 
 }

@@ -10,7 +10,7 @@ function PageSummary() {
   return (
     <PageShell
       title="Yönetici Özeti"
-      subtitle="Celltrion ürün, market ve stratejik gelişmeler · Mayıs 2026"
+      subtitle={`Celltrion ürün, market ve stratejik gelişmeler · ${REPORT_PERIOD}`}
     >
       {/* KPI strip */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
@@ -31,7 +31,7 @@ function PageSummary() {
             ))}
           </ol>
         </Card>
-        <Card className="col-span-12 xl:col-span-5" title="Son kritik gelişmeler" subtitle="Mayıs 2026 itibariyle">
+        <Card className="col-span-12 xl:col-span-5" title="Son kritik gelişmeler" subtitle={`${REPORT_PERIOD} itibariyle`}>
           <ul className="divide-y divide-gray-100">
             {RECENT_DEVELOPMENTS.map((d, i) => (
               <li key={i} className="px-5 py-3.5 flex items-start gap-4">
@@ -162,7 +162,7 @@ function PagePortfolio() {
           <table className="ltable">
             <thead>
               <tr>
-                <th>Ürün / Kod</th>
+                <th>Kod / Ürün</th>
                 <th>Molekül / Referans</th>
                 <th>Alan</th>
                 <th>Form</th>
@@ -176,8 +176,8 @@ function PagePortfolio() {
               {rows.map((p) => (
                 <tr key={p.code}>
                   <td>
-                    <div className="font-semibold text-gray-900">{p.name}</div>
-                    <div className="text-[11px] text-gray-500 font-mono mt-0.5">{p.code}</div>
+                    <div className="font-semibold text-gray-900 font-mono">{p.code}</div>
+                    {p.name !== p.code && <div className="text-[11px] text-gray-500 mt-0.5">{p.name}</div>}
                     <div className="mt-1.5"><Pill tone="gray" className="!text-[10px]">{p.category}</Pill></div>
                   </td>
                   <td className="text-sm">
@@ -244,7 +244,7 @@ function PagePipeline() {
           <table className="ltable">
             <thead>
               <tr>
-                <th>Ürün / Kod</th>
+                <th>Kod / Ürün</th>
                 <th>Molekül / Ref.</th>
                 <th>Alan</th>
                 <th>Aşama</th>
@@ -258,8 +258,8 @@ function PagePipeline() {
               {rows.map((p) => (
                 <tr key={p.code}>
                   <td>
-                    <div className="font-semibold text-gray-900">{p.name}</div>
-                    <div className="text-[11px] text-gray-500 font-mono mt-0.5">{p.code}</div>
+                    <div className="font-semibold text-gray-900 font-mono">{p.code}</div>
+                    {p.name !== p.code && <div className="text-[11px] text-gray-500 mt-0.5">{p.name}</div>}
                     <div className="mt-1.5"><Pill tone={p.type === "Biosimilar" ? "blue" : "purple"} className="!text-[10px]">{p.type}</Pill></div>
                   </td>
                   <td className="text-sm">
@@ -316,8 +316,8 @@ function PagePipeline() {
             <div key={p.code} className="bg-white border border-gray-200 rounded-lg p-4 space-y-2 flex flex-col">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-900 leading-tight">{p.name}</h3>
-                  <div className="text-[11px] text-gray-500 mt-0.5 font-mono">{p.code} · <span className="font-sans not-italic">{p.mol}</span></div>
+                  <h3 className="text-sm font-semibold text-gray-900 leading-tight font-mono">{p.code}</h3>
+                  <div className="text-[11px] text-gray-500 mt-0.5">{p.name !== p.code && <>{p.name} · </>}{p.mol}</div>
                 </div>
                 <Pill tone={p.importance === "Yüksek" ? "red" : "amber"}>{p.importance}</Pill>
               </div>
@@ -670,9 +670,56 @@ function HBar({ data, accent = "#2563eb", plannedAccent = "#a855f7" }) {
 }
 function DonutMix({ data }) {
   const total = data.reduce((s, d) => s + d.pct, 0);
+  const [tip, setTip] = usePS(null);
   let acc = 0;
   const r = 60, cx = 80, cy = 80, stroke = 18;
   const C = 2 * Math.PI * r;
+  const move = (e, d) => setTip({ x: e.clientX, y: e.clientY, d });
+  const tipBody = (d) => {
+    const t = d.tip;
+    if (typeof t === "string") {
+      return <div className="px-3 py-2.5 text-[12px] leading-relaxed text-gray-600">{t}</div>;
+    }
+    return (
+      <div>
+        <div className="px-3 pt-3 pb-2">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: d.color }}/>
+            <span className="text-[13px] font-semibold text-gray-900 leading-snug">{t.title || d.name}</span>
+          </div>
+          {t.subtitle && <div className="text-[11px] text-gray-500 mt-1">{t.subtitle}</div>}
+        </div>
+        {t.items && t.items.length > 0 && (
+          <div className="border-t border-gray-100 px-3 py-2">
+            <div className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-1.5">Kapsanan ürünler ({t.items.length})</div>
+            <table className="w-full text-[11px]">
+              <thead>
+                <tr className="text-[9px] uppercase tracking-wide text-gray-400">
+                  <th className="text-left font-medium pb-1 pr-3">Ürün Kodu</th>
+                  <th className="text-left font-medium pb-1">Ürün Adı</th>
+                </tr>
+              </thead>
+              <tbody>
+                {t.items.map((it) => (
+                  <tr key={it.code} className="align-top">
+                    <td className="pr-3 py-0.5 text-gray-500 whitespace-nowrap font-medium">{it.code}</td>
+                    <td className="py-0.5 text-gray-800">{it.name}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {t.note && (
+          <div className="border-t border-gray-100 px-3 py-2 text-[11px] italic text-gray-500 leading-relaxed">{t.note}</div>
+        )}
+      </div>
+    );
+  };
+  const vw = (typeof window !== "undefined" ? window.innerWidth : 1280);
+  const vh = (typeof window !== "undefined" ? window.innerHeight : 800);
+  const tipLeft = tip ? Math.min(tip.x + 16, vw - 296) : 0;
+  const tipTop = tip ? Math.min(tip.y + 16, vh - 220) : 0;
   return (
     <div className="flex items-center gap-5">
       <svg width="160" height="160" viewBox="0 0 160 160" className="shrink-0">
@@ -693,15 +740,25 @@ function DonutMix({ data }) {
       </svg>
       <ul className="grid grid-cols-1 gap-1.5 text-xs flex-1">
         {data.map((d) => (
-          <li key={d.name} className="flex items-center justify-between gap-3">
+          <li key={d.name}
+              onMouseEnter={d.tip ? (e) => move(e, d) : undefined}
+              onMouseMove={d.tip ? (e) => move(e, d) : undefined}
+              onMouseLeave={d.tip ? () => setTip(null) : undefined}
+              className={"flex items-center justify-between gap-3" + (d.tip ? " cursor-help" : "")}>
             <span className="inline-flex items-center gap-2 text-gray-700">
               <span className="w-2.5 h-2.5 rounded-sm" style={{ background: d.color }}/>
-              {d.name}
+              <span className={d.tip ? "underline decoration-dotted underline-offset-2" : ""}>{d.name}</span>
             </span>
             <span className="font-semibold text-gray-900">{d.pct}%</span>
           </li>
         ))}
       </ul>
+      {tip && (
+        <div style={{ position: "fixed", left: tipLeft, top: tipTop, zIndex: 9999, width: 280 }}
+             className="pointer-events-none rounded-lg border border-gray-200 bg-white shadow-xl overflow-hidden">
+          {tipBody(tip.d)}
+        </div>
+      )}
     </div>
   );
 }
@@ -710,10 +767,10 @@ function PageFinancial() {
   return (
     <PageShell title="Finansal &amp; Ticari Sinyaller" subtitle="Konsolide finansal trend ve ürün karması">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-        <Card title="Yıllık gelir trendi" subtitle="TL KRW · Konsolide">
+        <Card title="Yıllık gelir trendi" subtitle="Mrd € · Konsolide">
           <div className="p-5"><HBar data={REVENUE_SERIES} accent="#2563eb" plannedAccent="#9333ea"/></div>
         </Card>
-        <Card title="Faaliyet karı trendi" subtitle="TL KRW · Yıllık">
+        <Card title="Faaliyet karı trendi" subtitle="Mn € · Yıllık">
           <div className="p-5"><HBar data={OPPROFIT_SERIES} accent="#f59e0b" plannedAccent="#9333ea"/></div>
         </Card>
         <Card title="2025 tahmini ürün karması" subtitle="Konsolide gelir kompozisyonu">
@@ -767,7 +824,7 @@ function PageCenk() {
             <h2 className="text-base font-semibold text-gray-900">Genel değerlendirme</h2>
             <p className="text-[13px] text-gray-600 mt-1 leading-relaxed max-w-[90ch]">
               Aşağıdaki analizler, Celltrion'un güncel stratejik hamlelerini Gensenta gibi steril flakon üreten bir CMO/fason üretici perspektifinden değerlendirmektedir.
-              Kaynaklar: Celltrion IR, FDA, EMA, Pearce IP, Korea Herald — Mayıs 2026.
+              Kaynaklar: Celltrion IR, FDA, EMA, Pearce IP, Korea Herald — {REPORT_PERIOD}.
             </p>
           </div>
         </div>
@@ -819,6 +876,102 @@ function PageCenk() {
   );
 }
 
+// ────────────────────────────────────────────────────────────────────────────
+function PageRadar() {
+  const [pf, setPf] = usePS("Tümü");
+  const offered    = RADAR.filter((r) => r.offer.includes("teklifi geldi"));
+  const candidates = RADAR.filter((r) => !r.offer.includes("teklifi geldi"));
+  const candShown  = candidates.filter((r) => pf === "Tümü" || r.priority === pf);
+  const kAktif  = offered.length;
+  const kAday   = candidates.length;
+  const kYuksek = RADAR.filter((r) => r.priority === "Yüksek").length;
+  const kYeni   = RADAR.filter((r) => /yeni ilaç|ADC|msAb|antikor/i.test(r.mol)).length;
+  const prTone  = { "Yüksek": "green", "Orta": "sky", "İzleme": "amber", "Düşük": "gray" };
+  const cfTone  = { "Doğrulanmış": "green", "Güçlü sinyal": "blue", "Zayıf sinyal": "amber", "Spekülatif": "gray" };
+
+  const Table = ({ rows }) => (
+    <div className="overflow-x-auto">
+      <table className="ltable">
+        <thead>
+          <tr>
+            <th>Kod / Ürün</th><th>Molekül / INN</th><th>Referans</th><th>Format</th><th>Hat Uyumu</th>
+            <th>Güncel Faz / Durum</th><th>Teklif Durumu</th><th>Pazarlar</th><th>Fırsat Değerlendirmesi</th><th>Öncelik</th><th>Güven</th><th>Kaynak</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i}>
+              <td><div className="font-semibold text-gray-900 font-mono break-words max-w-[120px]">{r.code}</div></td>
+              <td className="text-[12.5px] text-gray-800 whitespace-normal break-words max-w-[150px]">{r.mol}</td>
+              <td className="text-[12px] text-gray-600 whitespace-normal break-words max-w-[110px]">{r.ref}</td>
+              <td className="text-[12px] text-gray-700 whitespace-normal break-words max-w-[120px]">{r.format}</td>
+              <td className="text-[12px] text-gray-700 whitespace-normal break-words max-w-[100px]">{r.fit}</td>
+              <td className="text-[12px] text-gray-700 whitespace-normal break-words max-w-[170px] leading-relaxed">{r.phase}</td>
+              <td><Pill tone={r.offer.includes("teklifi geldi") ? "green" : "gray"}>{r.offer.includes("teklifi geldi") ? "Teklif geldi" : "Talep adayı"}</Pill></td>
+              <td className="text-[12px] text-gray-600 whitespace-normal break-words max-w-[130px]">{r.markets}</td>
+              <td className="text-[12px] text-gray-700 whitespace-normal break-words max-w-[210px] leading-relaxed">{r.assessment}</td>
+              <td><Pill tone={prTone[r.priority] || "gray"}>{r.priority}</Pill></td>
+              <td><Pill tone={cfTone[r.conf] || "gray"}>{r.conf}</Pill></td>
+              <td>{r.url && <a href={r.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 inline-flex"><I.ArrowUpRight className="w-3.5 h-3.5"/></a>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  return (
+    <PageShell title="Gensenta DP Fırsat Radarı" subtitle="Gensenta'nın ÜRETMEDİĞİ Celltrion ürünleri — talep adayları + Celltrion'dan teklif gelenler">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <KPI label="Aktif Teklif" value={String(kAktif)} sub="Celltrion'dan gelen üretim teklifi" tone="green" />
+        <KPI label="Talep Adayı" value={String(kAday)} sub="Proaktif talep edilebilir" tone="blue" />
+        <KPI label="Yüksek Öncelik" value={String(kYuksek)} sub="IV/flakon — yüksek hat uyumu" tone="sky" />
+        <KPI label="Yeni İlaç (erken faz)" value={String(kYeni)} sub="ADC / msAb — uzun ufuk" tone="purple" />
+      </div>
+
+      <Card title="Pazar önceliği" subtitle="Gensenta GMP kapsamı (AB > Japonya > Kore > Brezilya > MENA > ABD)">
+        <div className="p-4 space-y-2.5">
+          {RADAR_MARKETS.map((m) => {
+            const toneColor = { green: "#10b981", sky: "#0ea5e9", blue: "#2563eb", amber: "#f59e0b", orange: "#f97316", red: "#ef4444" };
+            return (
+              <div key={m.market} className="flex items-center gap-3">
+                <div className="w-6 text-sm font-bold text-gray-300 text-right">{m.rank}</div>
+                <div className="w-48 shrink-0">
+                  <div className="text-sm font-semibold text-gray-900">{m.market}</div>
+                  <div className="text-[11px] text-gray-500">{m.gmp}</div>
+                </div>
+                <div className="flex-1 h-2.5 rounded-full bg-gray-100 overflow-hidden min-w-[80px]">
+                  <div className="h-full rounded-full" style={{ width: m.weight + "%", background: toneColor[m.tone] || "#94a3b8" }} />
+                </div>
+                <div className="w-60 shrink-0 text-[12px] text-gray-600 hidden md:block">{m.note}</div>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+
+      <Card className="border-emerald-200" title={<span className="inline-flex items-center gap-2"><I.Crosshair className="w-4 h-4 text-emerald-600"/>Celltrion'dan üretim teklifi gelenler</span>} subtitle="En somut fırsatlar — fiilen teklif alınmış (iç bilgi)" action={<Pill tone="green">{offered.length} ürün</Pill>}>
+        <Table rows={offered} />
+      </Card>
+
+      <FilterBar>
+        <span className="text-xs font-medium text-gray-500">Öncelik</span>
+        <FilterChips options={["Tümü", "Yüksek", "Orta", "İzleme"]} value={pf} onChange={setPf} />
+        <div className="ml-auto text-xs text-gray-500 font-medium">{candShown.length} / {candidates.length} aday</div>
+      </FilterBar>
+
+      <Card title="Talep adayları — teklif yok" subtitle="Gensenta'nın proaktif talep edebileceği, hat-uyumlu Celltrion ürünleri">
+        <Table rows={candShown} />
+      </Card>
+
+      <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-[12px] text-amber-900 leading-relaxed">
+        <strong>Kapsam:</strong> Radar yalnızca Gensenta'nın üretmediği ve sözleşmeye bağlanmamış ürünleri içerir; Gensenta'nın mevcut ürünleri (CT-P13, CT-P6, CT-P43) ve sözleşmeli kalemler radar dışıdır.
+        <strong> Teklif durumu</strong> iç bilgidir (yalnızca Cenk sağlar/günceller; halka açık kaynaktan araştırılmaz, dışarıya yayınlanmaz). Diğer alanlar kamuya açık + doğrulanmış kaynaklara dayanır.
+      </div>
+    </PageShell>
+  );
+}
+
 Object.assign(window, {
-  PageSummary, PagePortfolio, PagePipeline, PageMarkets, PageNews, PageRisks, PageSignals, PageFinancial, PageCenk,
+  PageSummary, PagePortfolio, PagePipeline, PageMarkets, PageNews, PageRisks, PageSignals, PageFinancial, PageRadar, PageCenk,
 });
