@@ -128,6 +128,7 @@ function MarketList({ markets = [], extra = [] }) {
 function PagePortfolio() {
   const [filter, setFilter] = usePS("Tümü");
   const [q, setQ] = usePS("");
+  const [gfilter, setGfilter] = usePS("Tümü");
   const cats = useM(() => {
     const counts = { Tümü: PORTFOLIO.length };
     for (const p of PORTFOLIO) counts[p.category] = (counts[p.category] || 0) + 1;
@@ -137,8 +138,12 @@ function PagePortfolio() {
   const rows = useM(() => PORTFOLIO.filter(p => {
     if (filter !== "Tümü" && p.category !== filter) return false;
     if (q && !(p.name + p.code + p.mol + p.ref).toLowerCase().includes(q.toLowerCase())) return false;
+    if (gfilter !== "Tümü") {
+      if (gfilter === "Vial 4 uyumlu") { if (!vial4Compatible(p.form)) return false; }
+      else if ((GENSENTA_STATUS[p.code] || "") !== gfilter) return false;
+    }
     return true;
-  }), [filter, q]);
+  }), [filter, q, gfilter]);
 
   return (
     <PageShell title="Ürün Portföyü" subtitle="Mevcut ticari biosimilar portföyü">
@@ -153,7 +158,11 @@ function PagePortfolio() {
           />
         </div>
         <div className="h-6 w-px bg-gray-200 hidden md:block"/>
+        <span className="text-xs font-medium text-gray-500">Kategori</span>
         <FilterChips options={opts} value={filter} onChange={setFilter}/>
+        <div className="h-6 w-px bg-gray-200 hidden md:block"/>
+        <span className="text-xs font-medium text-gray-500">Gensenta</span>
+        <FilterChips options={["Tümü", "Üretiliyor", "Teklif aşamasında", "Üretilebilir", "Vial 4 uyumlu"]} value={gfilter} onChange={setGfilter}/>
         <div className="ml-auto text-xs text-gray-500 font-medium">{rows.length} / {PORTFOLIO.length} ürün</div>
       </FilterBar>
 
@@ -163,6 +172,8 @@ function PagePortfolio() {
             <thead>
               <tr>
                 <th>Kod / Ürün</th>
+                <th>Gensenta Durumu</th>
+                <th>Vial 4</th>
                 <th>Molekül / Referans</th>
                 <th>Alan</th>
                 <th>Form</th>
@@ -179,6 +190,12 @@ function PagePortfolio() {
                     <div className="font-semibold text-gray-900 font-mono">{p.code}</div>
                     {p.name !== p.code && <div className="text-[11px] text-gray-500 mt-0.5">{p.name}</div>}
                     <div className="mt-1.5"><Pill tone="gray" className="!text-[10px]">{p.category}</Pill></div>
+                  </td>
+                  <td>
+                    <Pill tone={({"Üretiliyor":"green","Teklif aşamasında":"amber","Üretilebilir":"purple"})[GENSENTA_STATUS[p.code]] || "gray"}>{GENSENTA_STATUS[p.code] || "—"}</Pill>
+                  </td>
+                  <td>
+                    {vial4Compatible(p.form) ? <Pill tone="sky">Uyumlu</Pill> : <span className="text-gray-300 text-sm">—</span>}
                   </td>
                   <td className="text-sm">
                     <div className="font-medium text-gray-800">{p.mol}</div>
@@ -199,23 +216,6 @@ function PagePortfolio() {
         </div>
       </Card>
 
-      {/* Category footer */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { label: "İmmünoloji", count: 6, tone: "blue" },
-          { label: "Onkoloji",   count: 3, tone: "purple" },
-          { label: "Oftalmoloji",count: 1, tone: "amber" },
-          { label: "Kemik",      count: 1, tone: "green" },
-        ].map((c) => (
-          <div key={c.label} className="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between">
-            <div>
-              <div className="text-[11px] uppercase tracking-wider text-gray-500 font-medium">{c.label}</div>
-              <div className="text-2xl font-bold text-gray-900 mt-1">{c.count}<span className="text-sm font-medium text-gray-400 ml-1">ürün</span></div>
-            </div>
-            <Pill tone={c.tone}>Aktif</Pill>
-          </div>
-        ))}
-      </div>
     </PageShell>
   );
 }
@@ -245,6 +245,8 @@ function PagePipeline() {
             <thead>
               <tr>
                 <th>Kod / Ürün</th>
+                <th>Gensenta Durumu</th>
+                <th>Vial 4</th>
                 <th>Molekül / Ref.</th>
                 <th>Alan</th>
                 <th>Aşama</th>
@@ -261,6 +263,12 @@ function PagePipeline() {
                     <div className="font-semibold text-gray-900 font-mono">{p.code}</div>
                     {p.name !== p.code && <div className="text-[11px] text-gray-500 mt-0.5">{p.name}</div>}
                     <div className="mt-1.5"><Pill tone={p.type === "Biosimilar" ? "blue" : "purple"} className="!text-[10px]">{p.type}</Pill></div>
+                  </td>
+                  <td>
+                    <Pill tone={({"Üretiliyor":"green","Teklif aşamasında":"amber","Üretilebilir":"purple"})[gensentaStatus(p.code, PIPELINE_FORM[p.code] || p.cmo)] || "gray"}>{gensentaStatus(p.code, PIPELINE_FORM[p.code] || p.cmo)}</Pill>
+                  </td>
+                  <td>
+                    {vial4Compatible(PIPELINE_FORM[p.code] || p.cmo) ? <Pill tone="sky">Uyumlu</Pill> : <span className="text-gray-300 text-sm">—</span>}
                   </td>
                   <td className="text-sm">
                     <div className="font-medium text-gray-800">{p.mol}</div>
@@ -964,10 +972,6 @@ function PageRadar() {
         <Table rows={candShown} />
       </Card>
 
-      <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-[12px] text-amber-900 leading-relaxed">
-        <strong>Kapsam:</strong> Radar yalnızca Gensenta'nın üretmediği ve sözleşmeye bağlanmamış ürünleri içerir; Gensenta'nın mevcut ürünleri (CT-P13, CT-P6, CT-P43) ve sözleşmeli kalemler radar dışıdır.
-        <strong> Teklif durumu</strong> iç bilgidir (yalnızca Cenk sağlar/günceller; halka açık kaynaktan araştırılmaz, dışarıya yayınlanmaz). Diğer alanlar kamuya açık + doğrulanmış kaynaklara dayanır.
-      </div>
     </PageShell>
   );
 }
